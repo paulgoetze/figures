@@ -15,7 +15,7 @@ gem 'figures'
 ```ruby
 require 'figures'
 
-Figures.parse(1234, :de) # => 'eintausendzweihundertvierunddreißig'
+Figures.write(1234, :de) # => 'eintausendzweihundertvierunddreißig'
 ```
 
 

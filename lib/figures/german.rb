@@ -2,23 +2,68 @@ module Figures
   class German
     WORDS = {
       copula: "und",
-      digits: %w[null ein zwei drei vier fünf sechs sieben acht neun],
-      tens: %w[eine zehn zwanzig dreißig vierzig fünfzig sechzig siebzig achzig neunzig],
-      exponents: %w[hundert tausend million milliarden billion billiarden trillion trilliarden quadrillionen quadrilliarden quintillion sextillion sextilliarden]
-    }.freeze
+      zero: "null",
+      single: "eins",
+      one: "eine",
+      first10: [""] + %w[
+        ein
+        zwei
+        drei
+        vier
+        fünf
+        sechs
+        sieben
+        acht
+        neun
+      ],
+      second10: %w[
+        zehn
+        elf
+        zwölf
+        dreizehn
+        vierzehn
+        fünfzehn
+        sechzehn
+        siebzehn
+        achtzehn
+        neunzehn
+      ],
+      tens: %w[
+        zwanzig
+        dreißig
+        vierzig
+        fünfzig
+        sechzig
+        siebzig
+        achzig
+        neunzig
+      ],
+      hundred: 'hundert',
+      thousand: 'tausend',
+      huge: %w[
+        Million
+        Milliarde
+        Billion
+        Billiarde
+        Trillion
+        Trilliarde
+        Quadrillion
+        Quadrilliarde
+        Quintillion
+        Sextillion
+        Sextilliarde
+      ]
+    }
 
     def initialize(number)
-      @number = number.to_i
+      @number = number
     end
 
-    def parse
-      return WORDS[:digits][@number] if @number < 10 && @number >= 0
-
+    def write
+      return WORDS[:zero] if @number == 0
       number_string = @number.to_s.reverse.scan(/.{1,3}/).map.with_index{ |number_part, index|
-        parse_triple(number_part.reverse.to_i, index)
-      }.reverse.join
-
-      number_string.sub! /^und/, '' # TODO investigate
+        write_triple(number_part.reverse.to_i, index)
+      }.reverse.join.strip
 
       if @number < 0
         "minus #{number_string}"
@@ -27,63 +72,45 @@ module Figures
       end
     end
 
-    def parse_triple(number, triple_index)
-      temp_number = number.abs
-      number_word = ""
-      temp_tens   = ""
+    def write_triple(number, triple_index)
+      hundred, ten, one = number.abs.to_s.match(/\A(\d)??(\d)??(\d)\z/).captures.map(&:to_i)
+      result = ""
 
-      return 'eins' if temp_number == 1 && triple_index == 0 # FIXME 
+      is_thousand = triple_index > 0 && triple_index % 2 == 1 && !(hundred == 0 && ten == 0 && one == 0)
 
-      while temp_number > 0
-        decimal_power = Math.log10(temp_number).floor
-        number_base = 10 ** decimal_power
-        number_tail = temp_number - (temp_number % number_base)
-        digit = number_tail / number_base
-
-        copula = ((digit > 1) ? WORDS[:copula] : "")
-        leading_single = (triple_index >= 2 && digit == 1) ? WORDS[:tens][0].to_s : WORDS[:digits][digit].to_s
-
-        if decimal_power == 2
-          number_word << WORDS[:digits][digit].to_s << WORDS[:exponents][0].to_s
-        end
-
-        if decimal_power == 0 && !temp_tens.empty?
-          number_word << WORDS[:digits][digit].to_s
-        end
-
-        if decimal_power == 0 && temp_tens.empty?
-          number_word << copula << leading_single
-        end
-
-        if decimal_power == 1
-          temp_tens << copula << WORDS[:tens][digit].to_s
-        end
-
-        temp_number = temp_number - number_tail
+      if hundred && hundred != 0
+        result << WORDS[:first10][hundred] + WORDS[:hundred]
       end
 
-      number_word << temp_tens
-
-      if triple_index > 0
-        number_word << WORDS[:exponents][triple_index].to_s
+      if !ten
+        result << WORDS[:first10][one]
+      elsif ten == 0
+        if !is_thousand && hundred && one == 1
+          if triple_index > 1
+            result << WORDS[:one]
+          else
+            result << WORDS[:single]
+          end
+        else
+          result << WORDS[:first10][one]
+        end
+      elsif ten == 1
+        result << WORDS[:second10][one]
+      else
+        result << WORDS[:first10][one]
+        result << WORDS[:copula] unless one == 0
+        result << WORDS[:tens][ten - 2]
       end
 
-      number_word = handle_exceptions(number_word)
-      number_word = remove_wrong_leadings(number_word)
+      if is_thousand
+        result << WORDS[:thousand]
+      elsif triple_index > 1
+        huge = WORDS[:huge][triple_index - 2].dup
+        huge[/e?$/] = "en" unless one == 1
+        result << " #{huge} "
+      end
 
-      number_word
+      result
     end
-
-    def handle_exceptions(word)
-      word = word.gsub('einzehn', 'elf')
-      word = word.gsub('zweizehn', 'zwölf')
-      word = word.gsub('sechszehn', 'sechzehn')
-      word = word.gsub('siebenzehn', 'siebzehn')
-    end
-
-    def remove_wrong_leadings(word)
-      word.gsub(/^(und|null)/, '')
-    end
-    
   end
 end
