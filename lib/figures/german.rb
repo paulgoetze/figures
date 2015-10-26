@@ -26,8 +26,7 @@ module Figures
     end
 
     def parse_triple(number, triple_index)
-      return 'eins'       if number == 1 && triple_index == 0
-      return 'minus eins' if number == -1 && triple_index == 0
+      # return 'eins'  if number / 10 % 10 == 0 # ten is null
 
       temp_number = number.abs
       number_word = ""
@@ -35,17 +34,19 @@ module Figures
 
       while temp_number > 0
         decimal_power = Math.log10(temp_number).floor
-        num = temp_number - (temp_number % (10 ** decimal_power))
-        index = num / (10 ** decimal_power)
-        copula = ((index > 1) ? WORDS[:copula] : "")
-        leading_single = (triple_index >= 2 && index == 1) ? WORDS[:tens][0].to_s : WORDS[:digits][index].to_s
+        number_base = 10 ** decimal_power
+        number_tail = temp_number - (temp_number % number_base)
+        digit = number_tail / number_base
+
+        copula = ((digit > 1) ? WORDS[:copula] : "")
+        leading_single = (triple_index >= 2 && digit == 1) ? WORDS[:tens][0].to_s : WORDS[:digits][digit].to_s
 
         if decimal_power == 2
-          number_word << WORDS[:digits][index].to_s << WORDS[:exponents][0].to_s
+          number_word << WORDS[:digits][digit].to_s << WORDS[:exponents][0].to_s
         end
 
         if decimal_power == 0 && !temp_tens.empty?
-          number_word << WORDS[:digits][index].to_s
+          number_word << WORDS[:digits][digit].to_s
         end
 
         if decimal_power == 0 && temp_tens.empty?
@@ -53,10 +54,10 @@ module Figures
         end
 
         if decimal_power == 1
-          temp_tens << copula << WORDS[:tens][index].to_s
+          temp_tens << copula << WORDS[:tens][digit].to_s
         end
 
-        temp_number = temp_number - num
+        temp_number = temp_number - number_tail
       end
 
       number_word << temp_tens
