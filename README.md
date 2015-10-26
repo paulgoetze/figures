@@ -21,4 +21,4 @@ Figures.parse(1234, :de) # => 'eintausendzweihundertvierunddreißig'
 
 ## MIT License
 
-Copyright (C) 2015 Paul Götze. Released under the MIT license.
+Copyright (C) 2015 Paul Götze, Jan Lelis. Released under the MIT license.
