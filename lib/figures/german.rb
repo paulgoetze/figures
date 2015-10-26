@@ -14,8 +14,9 @@ module Figures
     def parse
       return WORDS[:digits][@number] if @number < 10 && @number >= 0
 
-      number_string = @number.to_s.reverse.scan(/.{1,3}/).map.with_index{ |number_part, index|
-        parse_triple(number_part.reverse.to_i, index)
+      triples = @number.to_s.reverse.scan(/.{1,3}/)
+      number_string = triples.map.with_index{ |number_part, index|
+        parse_triple number_part.reverse.to_i, index, triples.size - 1 == index
       }.reverse.join
 
       number_string.sub! /^und/, '' # TODO investigate
@@ -27,12 +28,13 @@ module Figures
       end
     end
 
-    def parse_triple(number, triple_index)
+    def parse_triple(number, triple_index, is_leading)
       temp_number = number.abs
       number_word = ""
       temp_tens   = ""
+      ten_exists = false
 
-      return 'eins' if temp_number == 1 && triple_index == 0 # FIXME 
+      # return 'eins' if temp_number == 1 && triple_index == 0 # FIXME 
 
       while temp_number > 0
         decimal_power = Math.log10(temp_number).floor
@@ -52,11 +54,16 @@ module Figures
         end
 
         if decimal_power == 0 && temp_tens.empty?
-          number_word << copula << leading_single
+          if digit == 1# && !is_leading
+            number_word << "eins"
+          else
+            number_word << copula << leading_single
+          end
         end
 
         if decimal_power == 1
           temp_tens << copula << WORDS[:tens][digit].to_s
+          ten_exists = true
         end
 
         temp_number = temp_number - number_tail
