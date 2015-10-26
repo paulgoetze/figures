@@ -8,23 +8,24 @@ module Figures
     }.freeze
 
     def initialize(number)
-      @number = number
+      @number = number.to_i
     end
 
     def parse
+      return WORDS[:digits][@number] if @number < 10 && @number >= 0
+
       number_triples = @number.to_s.reverse.scan(/.{1,3}/).map do |triple|
         triple.reverse.to_i
       end
 
-      word_parts = number_triples.map.with_index do |part, index|
-        parse_triple(part.to_i, index)
+      word_parts = number_triples.map.with_index do |number_part, index|
+        parse_triple(number_part.to_i, index)
       end
 
       word_parts.reverse.join('').gsub(/^und/, '')
     end
 
     def parse_triple(number, triple_index)
-      return 'null'       if number == 0
       return 'eins'       if number == 1 && triple_index == 0
       return 'minus eins' if number == -1 && triple_index == 0
 
