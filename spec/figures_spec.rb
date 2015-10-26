@@ -4,6 +4,10 @@ require "minitest/autorun"
 describe Figures do
   describe '.parse' do
     describe '[german]' do
+      it 'parses -1' do
+        assert_equal 'minus eins', Figures.parse(-1, :de)
+      end
+
       it 'parses 0' do
         assert_equal 'null', Figures.parse(0, :de)
       end

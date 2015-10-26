@@ -22,15 +22,21 @@ module Figures
         parse_triple(number_part.to_i, index)
       end
 
-      word_parts.reverse.join('').gsub(/^und/, '')
+      result = word_parts.reverse.join('').gsub(/^und/, '')
+
+      if @number < 0
+        "minus #{result}"
+      else
+        result
+      end
     end
 
     def parse_triple(number, triple_index)
-      # return 'eins'  if number / 10 % 10 == 0 # ten is null
-
       temp_number = number.abs
       number_word = ""
       temp_tens   = ""
+
+      return 'eins' if temp_number == 1 && triple_index == 0 # FIXME 
 
       while temp_number > 0
         decimal_power = Math.log10(temp_number).floor
@@ -68,10 +74,6 @@ module Figures
 
       number_word = handle_exceptions(number_word)
       number_word = remove_wrong_leadings(number_word)
-
-      if number < 0
-        number_word = "minus #{number_word}"
-      end
 
       number_word
     end
