@@ -5,9 +5,9 @@ require File.dirname(__FILE__) + "/lib/figures/version"
 Gem::Specification.new do |gem|
   gem.name          = "figures"
   gem.version       = Figures::VERSION
-  gem.summary       = "TODO"
-  gem.description   = "TODO"
-  gem.authors       = ["Paul Götze"]
+  gem.summary       = "German number words"
+  gem.description   = "German number words."
+  gem.authors       = ["Paul Götze", "Jan Lelis"]
   gem.email         = "paul.christoph.goetze@gmail.com"
   gem.homepage      = "https://github.com/paulgoetze/figures"
   gem.license       = "MIT"
