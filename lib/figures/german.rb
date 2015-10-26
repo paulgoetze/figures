@@ -1,9 +1,5 @@
 module Figures
   class German
-    ONE     = 0.freeze
-    TEN     = 1.freeze
-    HUNDRED = 2.freeze
-
     WORDS = {
       copula: "und",
       digits: %w[null ein zwei drei vier fünf sechs sieben acht neun],
@@ -43,19 +39,19 @@ module Figures
         copula = ((index > 1) ? WORDS[:copula] : "")
         leading_single = (triple_index >= 2 && index == 1) ? WORDS[:tens][0].to_s : WORDS[:digits][index].to_s
 
-        if decimal_power == HUNDRED
+        if decimal_power == 2
           number_word << WORDS[:digits][index].to_s << WORDS[:exponents][0].to_s
         end
 
-        if decimal_power == ONE && !temp_tens.empty?
+        if decimal_power == 0 && !temp_tens.empty?
           number_word << WORDS[:digits][index].to_s
         end
 
-        if decimal_power == ONE && temp_tens.empty?
+        if decimal_power == 0 && temp_tens.empty?
           number_word << copula << leading_single
         end
 
-        if decimal_power == TEN
+        if decimal_power == 1
           temp_tens << copula << WORDS[:tens][index].to_s
         end
 
