@@ -2,9 +2,9 @@ require_relative "figures/version"
 
 module Figures
 
-  def self.ask(number)
+  def self.parse(number, language_code = :de)
     number_triples = number.to_s.reverse.scan(/.{1,3}/).map{ |triple| triple.reverse.to_i }
-    puts number_triples.map.with_index { |part, index| german_words_for(part.to_i, index) }.reverse.join('').gsub(/^und/, '')
+    number_triples.map.with_index { |part, index| german_words_for(part.to_i, index) }.reverse.join('').gsub(/^und/, '')
   end
 
   ONE = 0
