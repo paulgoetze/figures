@@ -141,10 +141,12 @@ describe Figures do
       end
 
       it 'parses 1_000_000' do
+        fail 'figure out'
         assert_equal 'million', Figures.parse(1_000_000, :de)
       end
 
       it 'parses 2_000_000' do
+        fail 'figure out'
         assert_equal 'zwei millionen', Figures.parse(1_000_000, :de)
       end
     end
