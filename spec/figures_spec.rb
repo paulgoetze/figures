@@ -121,7 +121,7 @@ describe Figures do
       end
 
       it 'parses 1_000' do
-        assert_equal 'tausend', Figures.parse(1000, :de)
+        assert_equal 'eintausend', Figures.parse(1000, :de)
       end
 
       it 'parses 1_234' do
