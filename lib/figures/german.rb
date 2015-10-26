@@ -14,20 +14,16 @@ module Figures
     def parse
       return WORDS[:digits][@number] if @number < 10 && @number >= 0
 
-      number_triples = @number.to_s.reverse.scan(/.{1,3}/).map do |triple|
-        triple.reverse.to_i
-      end
+      number_string = @number.to_s.reverse.scan(/.{1,3}/).map.with_index{ |number_part, index|
+        parse_triple(number_part.reverse.to_i, index)
+      }.reverse.join
 
-      word_parts = number_triples.map.with_index do |number_part, index|
-        parse_triple(number_part.to_i, index)
-      end
-
-      result = word_parts.reverse.join('').gsub(/^und/, '')
+      number_string.sub! /^und/, '' # TODO investigate
 
       if @number < 0
-        "minus #{result}"
+        "minus #{number_string}"
       else
-        result
+        number_string
       end
     end
 
