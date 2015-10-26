@@ -4,14 +4,12 @@ module Figures
     TEN     = 1.freeze
     HUNDRED = 2.freeze
 
-    GERMAN_WORDS = [
-      [ :und, :ein, :zwei, :drei, :vier, :fünf, :sechs, :sieben, :acht, :neun ],
-      [ :eine, :zehn, :zwanzig, :dreißig, :vierzig, :fünfzig, :sechzig, :siebzig, :achzig, :neunzig ],
-      [
-        :hundert, :tausend, :million, :milliarden, :billion, :billiarden, :trillion, :trilliarden,
-        :quadrillionen, :quadrilliarden, :quintillion, :sextillion, :sextilliarden
-      ]
-    ].freeze
+    WORDS = {
+      copula: "und",
+      digits: %w[null ein zwei drei vier fünf sechs sieben acht neun],
+      tens: %w[eine zehn zwanzig dreißig vierzig fünfzig sechzig siebzig achzig neunzig],
+      exponents: %w[hundert tausend million milliarden billion billiarden trillion trilliarden quadrillionen quadrilliarden quintillion sextillion sextilliarden]
+    }.freeze
 
     def initialize(number)
       @number = number
@@ -42,15 +40,15 @@ module Figures
         decimal_power = Math.log10(temp_number).floor
         num = temp_number - (temp_number % (10 ** decimal_power))
         index = num / (10 ** decimal_power)
-        copula = ((index > 1) ? GERMAN_WORDS[0][0].to_s : "")
-        leading_single = (triple_index >= 2 && index == 1) ? GERMAN_WORDS[1][0].to_s : GERMAN_WORDS[0][index].to_s
+        copula = ((index > 1) ? WORDS[:copula] : "")
+        leading_single = (triple_index >= 2 && index == 1) ? WORDS[:tens][0].to_s : WORDS[:digits][index].to_s
 
         if decimal_power == HUNDRED
-          number_word << GERMAN_WORDS[0][index].to_s << GERMAN_WORDS[2][0].to_s
+          number_word << WORDS[:digits][index].to_s << WORDS[:exponents][0].to_s
         end
 
         if decimal_power == ONE && !temp_tens.empty?
-          number_word << GERMAN_WORDS[0][index].to_s
+          number_word << WORDS[:digits][index].to_s
         end
 
         if decimal_power == ONE && temp_tens.empty?
@@ -58,7 +56,7 @@ module Figures
         end
 
         if decimal_power == TEN
-          temp_tens << copula << GERMAN_WORDS[1][index].to_s
+          temp_tens << copula << WORDS[:tens][index].to_s
         end
 
         temp_number = temp_number - num
@@ -67,7 +65,7 @@ module Figures
       number_word << temp_tens
 
       if triple_index > 0
-        number_word << GERMAN_WORDS[2][triple_index].to_s
+        number_word << WORDS[:exponents][triple_index].to_s
       end
 
       number_word = handle_exceptions(number_word)
