@@ -76,7 +76,8 @@ module Figures
       hundred, ten, one = number.abs.to_s.match(/\A(\d)??(\d)??(\d)\z/).captures.map(&:to_i)
       result = ""
 
-      is_thousand = triple_index > 0 && triple_index % 2 == 1 && !(hundred == 0 && ten == 0 && one == 0)
+      is_empty    = hundred == 0 && ten == 0 && one == 0
+      is_thousand = !is_empty && triple_index == 1
 
       if hundred && hundred != 0
         result << WORDS[:first10][hundred] + WORDS[:hundred]
@@ -104,7 +105,7 @@ module Figures
 
       if is_thousand
         result << WORDS[:thousand]
-      elsif triple_index > 1
+      elsif triple_index > 1 && !is_empty
         huge = WORDS[:huge][triple_index - 2].dup
         huge[/e?$/] = "en" unless one == 1
         result << " #{huge} "

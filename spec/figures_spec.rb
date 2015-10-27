@@ -151,7 +151,18 @@ describe Figures do
       it 'parses 2_000_000' do
         assert_equal 'zwei Millionen', Figures.write(2_000_000, :de)
       end
+
+      it 'parses 1_000_000_000' do
+        assert_equal 'eine Milliarde', Figures.write(1_000_000_000, :de)
+      end
+
+      it 'parses 2_000_000_000' do
+        assert_equal 'zwei Milliarden', Figures.write(2_000_000_000, :de)
+      end
+
+      it 'parses 2_000_003_000_000' do
+        assert_equal 'zwei Billionen drei Millionen', Figures.write(2_000_003_000_000, :de)
+      end
     end
   end
 end
-
