@@ -79,25 +79,23 @@ module Figures
     }
 
     def initialize(number)
-      @number = number
+      @number = number.to_i
     end
 
     def write
       return WORDS[:zero] if @number == 0
-      return "Rießig" if @number.to_s.size > 99
-      number_string = @number.to_s.reverse.scan(/.{1,3}/).map.with_index{ |number_part, index|
-        write_triple(number_part.reverse.to_i, index)
+      absolute_number_as_string = @number.abs.to_s
+      return "Rießig" if absolute_number_as_string.size > 99
+
+      result = absolute_number_as_string.reverse.scan(/.{1,3}/).map.with_index{ |triple, index|
+        write_triple(triple.reverse, index)
       }.reverse.join.strip
 
-      if @number < 0
-        "minus #{number_string}"
-      else
-        number_string
-      end
+      @number < 0 ? "minus #{result}" : result
     end
 
-    def write_triple(number, triple_index)
-      hundred, ten, one = number.abs.to_s.match(/\A(\d)??(\d)??(\d)\z/).captures.map(&:to_i)
+    def write_triple(triple, triple_index)
+      hundred, ten, one = triple.match(/\A(\d)??(\d)??(\d)\z/).captures.map(&:to_i)
       result = ""
 
       is_empty    = hundred == 0 && ten == 0 && one == 0
