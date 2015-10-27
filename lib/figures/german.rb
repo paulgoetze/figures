@@ -50,8 +50,31 @@ module Figures
         Quadrillion
         Quadrilliarde
         Quintillion
+        Quintilliarde
         Sextillion
         Sextilliarde
+        Septillion
+        Septilliarde
+        Oktillion
+        Oktilliarde
+        Oktillion
+        Oktilliarde
+        Nonillion
+        Nonilliarde
+        Dezillion
+        Dezilliarde
+        Undezillion
+        Undezilliarde
+        Dodezillion
+        Dodezilliarde
+        Tredezillion
+        Tredezilliarde
+        Quattuordezillion
+        Quattuordezilliarde
+        Quindezillion
+        Quindezilliarde
+        Sedezillion
+        Sedezilliarde
       ]
     }
 
@@ -61,6 +84,7 @@ module Figures
 
     def write
       return WORDS[:zero] if @number == 0
+      return "Rießig" if @number.to_s.size > 99
       number_string = @number.to_s.reverse.scan(/.{1,3}/).map.with_index{ |number_part, index|
         write_triple(number_part.reverse.to_i, index)
       }.reverse.join.strip
