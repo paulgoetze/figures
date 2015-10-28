@@ -1,6 +1,5 @@
 module Figures
   class German
-
     UNITS   = %w{ eins zwei drei vier fünf sechs sieben acht neun }.freeze
 
     PREFIXES = {
@@ -11,7 +10,7 @@ module Figures
     }.freeze
 
     EXCEPTIONS = {
-      /^eins(hundert|tausend)/ => 'ein\1',
+      /^eins(und|hundert|tausend)/ => 'ein\1',
       /^eins\s/    => 'eine ',
       'einszehn'   => 'elf',
       'zweizehn'   => 'zwölf',
@@ -37,7 +36,7 @@ module Figures
       word = triples.each_with_index.reduce('') do |result, (triple, index)|
         triple_word = triple_to_word(triple, index)
         result.prepend(triple_word)
-      end
+      end.strip
 
       number < 0 ? "minus #{word}" : word
     end
@@ -113,11 +112,15 @@ module Figures
       if index == 1
         word + PREFIXES[:units][0]
       elsif index.even?
-        word + ' ' + (PREFIXES[:units][index / 2] + 'llion ').capitalize.strip
+        pluralize(word + ' ' + (PREFIXES[:units][index / 2] + "llion ").capitalize)
       elsif index.odd?
-        plural_form = (word =~ /^eins/) ? '' : 'n'
-        word + ' ' + (PREFIXES[:units][index / 2] + "lliarde#{plural_form} ").capitalize.strip
+        pluralize(word + ' ' + (PREFIXES[:units][index / 2] + "lliarde ").capitalize)
       end
+    end
+
+    # pluralizes exponent identifiers
+    def pluralize(word)
+      word =~ /^eins/ ? word : word.sub(/e? $/, 'en ')
     end
 
     # replaces all exceptions in the number word
