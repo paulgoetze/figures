@@ -6,7 +6,7 @@ module Figures
     PREFIXES = {
       units:          %w{ tausend mi bi tri quadri quinti sexti septi okti noni },
       union_units:    %w{ un duo tre quattuor quinqua se septe okto nove },
-      union_tens:     %{ dezi viginti triginta quadraginta quinquaginta sexaginta septuaginta oktoginta nonaginta },
+      union_tens:     %w{ dezi viginti triginta quadraginta quinquaginta sexaginta septuaginta oktoginta nonaginta },
       union_hundreds: %w{ zenti duzenti trezenti quadringenti quingenti seszenti septingenti oktingenti nongenti }
     }.freeze
 
