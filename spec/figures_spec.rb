@@ -112,6 +112,10 @@ describe Figures do
         assert_equal 'einhunderteins', Figures.parse(101, :de)
       end
 
+      it 'parses 131' do
+        assert_equal 'einhunderteinunddreißig', Figures.parse(131, :de)
+      end
+
       it 'parses 199' do
         assert_equal 'einhundertneunundneunzig', Figures.parse(199, :de)
       end
