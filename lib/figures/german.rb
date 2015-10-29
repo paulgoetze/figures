@@ -10,8 +10,9 @@ module Figures
     }.freeze
 
     EXCEPTIONS = {
-      /^eins(und|hundert|tausend)/ => 'ein\1',
+      /^eins(hundert|tausend)/ => 'ein\1',
       /^eins\s/    => 'eine ',
+      /einsund/    => 'einund',
       'einszehn'   => 'elf',
       'zweizehn'   => 'zwölf',
       'sechszehn'  => 'sechzehn',
