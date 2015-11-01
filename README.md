@@ -15,7 +15,10 @@ gem 'figures'
 ```ruby
 require 'figures'
 
-Figures.write(1234, :de) # => 'eintausendzweihundertvierunddreißig'
+>> Figures.parse(1234, :de)
+=> 'eintausendzweihundertvierunddreißig'
+>> Figures.parse(11948643178718557106276991626757751015195481434, :de)
+=> "elf Septilliarden neunhundertachtundvierzig Septillionen sechshundertdreiundvierzig Sextilliarden einhundertachtundsiebzig Sextillionen siebenhundertachtzehn Quintilliarden fünfhundertsiebenundfünfzig Quintillionen einhundertsechs Quadrilliarden zweihundertsechsundsiebzig Quadrillionen neunhunderteinundneunzig Trilliarden sechshundertsechsundzwanzig Trillionen siebenhundertsiebenundfünfzig Billiarden siebenhunderteinundfünfzig Billionen fünfzehn Milliarden einhundertfünfundneunzig Millionen vierhunderteinundachtzigtausendvierhundertvierunddreißig"
 ```
 
 
