@@ -63,7 +63,7 @@ module Figures
       ].join
 
       word = append_exponent_identifier(word, triple_index)
-      cleanup_exceptions(word)
+      apply_exceptions(word)
     end
 
     # splits up a triple into hundreds, tens and unit position
@@ -113,19 +113,19 @@ module Figures
       if index == 1
         word + PREFIXES[:units][0]
       elsif index.even?
-        pluralize(word + ' ' + (PREFIXES[:units][index / 2] + "llion ").capitalize)
+        pluralize_if_plural(word + ' ' + (PREFIXES[:units][index / 2] + "llion ").capitalize)
       elsif index.odd?
-        pluralize(word + ' ' + (PREFIXES[:units][index / 2] + "lliarde ").capitalize)
+        pluralize_if_plural(word + ' ' + (PREFIXES[:units][index / 2] + "lliarde ").capitalize)
       end
     end
 
     # pluralizes exponent identifiers
-    def pluralize(word)
+    def pluralize_if_plural(word)
       word =~ /^eins/ ? word : word.sub(/e? $/, 'en ')
     end
 
     # replaces all exceptions in the number word
-    def cleanup_exceptions(word)
+    def apply_exceptions(word)
       EXCEPTIONS.each do |exception, replacement|
         word.sub!(exception, replacement)
       end
