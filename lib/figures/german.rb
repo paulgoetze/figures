@@ -121,7 +121,7 @@ module Figures
 
     # pluralizes exponent identifiers
     def pluralize_if_plural(word)
-      word =~ /^eins/ ? word : word.sub(/e? $/, 'en ')
+      word =~ /^eins / ? word : word.sub(/e? $/, 'en ')
     end
 
     # replaces all exceptions in the number word
