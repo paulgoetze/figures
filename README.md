@@ -1,4 +1,4 @@
-# figures [![[version]](https://badge.fury.io/rb/figures.svg)](http://badge.fury.io/rb/figures)  [![[travis]](https://travis-ci.org/paulgoetze/figures.png)](https://travis-ci.org/paulgoetze/figures)
+# figures [![[version]](https://badge.fury.io/rb/figures.svg)](https://badge.fury.io/rb/figures)  [![[ci]](https://github.com/paulgoetze/figures/workflows/Test/badge.svg)](https://github.com/paulgoetze/figures/actions?query=workflow%3ATest)
 
 German number words.
 

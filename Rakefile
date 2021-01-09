@@ -1,7 +1,7 @@
 # # #
 # Get gemspec info
 
-gemspec_file = Dir['*.gemspec'].first 
+gemspec_file = Dir['*.gemspec'].first
 gemspec = eval File.read(gemspec_file), binding, gemspec_file
 info = "#{gemspec.name} | #{gemspec.version} | " \
        "#{gemspec.runtime_dependencies.size} dependencies | " \
@@ -28,3 +28,18 @@ desc "#{gemspec.name} | IRB"
 task :irb do
   sh "irb -I ./lib -r #{gemspec.name.gsub '-','/'}"
 end
+
+
+# # #
+# Run specs
+
+desc "#{gemspec.name} | Spec"
+task :spec do
+  if RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
+    sh "for %f in (spec/\*.rb) do ruby spec/%f"
+  else
+    sh "for file in spec/*.rb; do ruby $file; done"
+  end
+end
+task default: :spec
+
