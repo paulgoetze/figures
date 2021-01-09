@@ -1,5 +1,6 @@
-module Figures
-  VERSION = "0.2.0".freeze
-end
+# frozen_string_literal: true
 
+module Figures
+  VERSION = "0.2.1"
+end
 
